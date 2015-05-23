@@ -1,0 +1,440 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     17670,        430]
+NotebookOptionsPosition[     17394,        416]
+NotebookOutlinePosition[     17733,        431]
+CellTagsIndexPosition[     17690,        428]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Quit", "[", "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.6413914147983418`*^9, 3.641391419206093*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+    "Using", " ", "A", "*", " ", "algorithm", " ", "to", " ", "optimize", " ",
+      "a", " ", "process", " ", "involving", " ", "several", " ", "nodes"}], 
+    ",", " ", 
+    RowBox[{
+    "where", " ", "the", " ", "cost", " ", "of", " ", "travel", " ", 
+     "between", " ", "each", " ", "nodes", " ", "is", " ", "taken", " ", "as",
+      " ", "input", " ", "through", " ", "a", " ", "matrix"}]}], "*)"}], 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"AstarHeuristic", "[", 
+      RowBox[{"nodes_", ",", "Heuristic_"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", "closedSet", "}"}], ",", 
+       RowBox[{
+        RowBox[{"closedSet", "=", 
+         RowBox[{"{", "}"}]}], ";", 
+        RowBox[{"(*", 
+         RowBox[{
+         "Set", " ", "of", " ", "nodes", " ", "already", " ", "evaluated"}], 
+         "*)"}], 
+        RowBox[{"startPos", "=", "1"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"goalPos", "=", 
+         RowBox[{"Length", "[", "nodes", "]"}]}], ";", "\[IndentingNewLine]", 
+        
+        RowBox[{"gscore", "=", 
+         RowBox[{"Array", "[", 
+          RowBox[{
+           RowBox[{"Infinity", "&"}], ",", "goalPos"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"fscore", "=", 
+         RowBox[{"Array", "[", 
+          RowBox[{
+           RowBox[{"Infinity", "&"}], ",", "goalPos"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"camefrom", "=", 
+         RowBox[{"Array", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"{", "}"}], "*", "0", "*", "#"}], "&"}], ",", 
+           "goalPos"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"gscore", "[", 
+          RowBox[{"[", "startPos", "]"}], "]"}], "=", "0"}], ";", 
+        RowBox[{"(*", 
+         RowBox[{
+         "Cost", " ", "from", " ", "start", " ", "along", " ", "the", " ", 
+          "best", " ", "known", " ", "path"}], "*)"}], 
+        RowBox[{
+         RowBox[{"fscore", "[", 
+          RowBox[{"[", "startPos", "]"}], "]"}], "=", 
+         RowBox[{
+          RowBox[{"gscore", "[", 
+           RowBox[{"[", "startPos", "]"}], "]"}], "+", 
+          RowBox[{"Heuristic", "[", 
+           RowBox[{"[", 
+            RowBox[{"startPos", ",", "goalPos"}], "]"}], "]"}]}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"(*", 
+         RowBox[{
+         "Estimated", " ", "total", " ", "cost", " ", "from", " ", "start", 
+          " ", "to", " ", "goal"}], "*)"}], 
+        RowBox[{"openSet", "=", 
+         RowBox[{"{", 
+          RowBox[{"nodes", "[", 
+           RowBox[{"[", "startPos", "]"}], "]"}], "}"}]}], ";", 
+        RowBox[{"(*", 
+         RowBox[{
+         "Set", " ", "of", " ", "tentative", " ", "nodes", " ", "to", " ", 
+          "be", " ", "evaluated"}], "*)"}], 
+        RowBox[{"count", "=", "1"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"While", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"Length", "[", "openSet", "]"}], ">", "0"}], "&&", 
+           RowBox[{"count", "<", "10"}]}], ",", 
+          RowBox[{
+           RowBox[{"current", "=", 
+            RowBox[{"openSet", "[", 
+             RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"For", "[", 
+            RowBox[{
+             RowBox[{"n", "=", "1"}], ",", 
+             RowBox[{"n", "\[LessEqual]", 
+              RowBox[{"Length", "[", "openSet", "]"}]}], ",", 
+             RowBox[{"n", "++"}], ",", 
+             RowBox[{
+              RowBox[{"If", "[", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"fscore", "[", 
+                   RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", "current"}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], ">", 
+                 RowBox[{
+                  RowBox[{"fscore", "[", 
+                   RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", 
+                    RowBox[{"openSet", "[", 
+                    RowBox[{"[", "n", "]"}], "]"}]}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], "[", 
+                  RowBox[{"[", "1", "]"}], "]"}]}], ",", 
+                RowBox[{
+                 RowBox[{"current", "=", 
+                  RowBox[{"openSet", "[", 
+                   RowBox[{"[", "n", "]"}], "]"}]}], ";"}]}], "]"}], ";"}]}], 
+            "]"}], ";", 
+           RowBox[{"(*", 
+            RowBox[{
+            "node", " ", "in", " ", "open", " ", "set", " ", "with", " ", 
+             "minimum", " ", "fscore", " ", "value"}], "*)"}], " ", ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"current", "\[Equal]", 
+              RowBox[{"nodes", "[", 
+               RowBox[{"[", "goalPos", "]"}], "]"}]}], ",", 
+             RowBox[{"Return", "[", 
+              RowBox[{"Join", "[", 
+               RowBox[{
+                RowBox[{"camefrom", "[", 
+                 RowBox[{"[", "goalPos", "]"}], "]"}], ",", 
+                RowBox[{"{", "current", "}"}]}], "]"}], "]"}]}], "]"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"openSet", "=", 
+            RowBox[{"Delete", "[", 
+             RowBox[{"openSet", ",", 
+              RowBox[{
+               RowBox[{"Position", "[", 
+                RowBox[{"openSet", ",", "current"}], "]"}], "[", 
+               RowBox[{"[", "1", "]"}], "]"}]}], "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"closedSet", "=", 
+            RowBox[{"Append", "[", 
+             RowBox[{"closedSet", ",", "current"}], "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"neighbourNodes", "=", "nodes"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"For", "[", 
+            RowBox[{
+             RowBox[{"i", "=", "1"}], ",", 
+             RowBox[{"i", "\[LessEqual]", 
+              RowBox[{"Length", "[", "neighbourNodes", "]"}]}], ",", 
+             RowBox[{"i", "++"}], ",", 
+             RowBox[{
+              RowBox[{"If", "[", 
+               RowBox[{
+                RowBox[{"MemberQ", "[", 
+                 RowBox[{"closedSet", ",", 
+                  RowBox[{"neighbourNodes", "[", 
+                   RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"Continue", "[", "]"}], ";"}]}], "]"}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"(*", 
+               RowBox[{
+                RowBox[{
+                "If", " ", "neighbour", " ", "is", " ", "a", " ", "member", 
+                 " ", "of", " ", "closed", " ", "set"}], ",", "continue"}], 
+               "*)"}], 
+              RowBox[{"tentativeGscore", "=", 
+               RowBox[{
+                RowBox[{"gscore", "[", 
+                 RowBox[{"[", 
+                  RowBox[{
+                   RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", "current"}], "]"}], "[", 
+                   RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], "+", 
+                RowBox[{
+                 RowBox[{"Heuristic", "[", 
+                  RowBox[{"[", 
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", "current"}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], ",", 
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", 
+                    RowBox[{"neighbourNodes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}]}], "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}]}]}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"If", "[", 
+               RowBox[{
+                RowBox[{"!", 
+                 RowBox[{"MemberQ", "[", 
+                  RowBox[{"openSet", ",", 
+                   RowBox[{"neighbourNodes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}]}], "]"}]}], ",", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"camefrom", "[", 
+                   RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", 
+                    RowBox[{"neighbourNodes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "[", 
+                    RowBox[{"[", 
+                    RowBox[{"1", ",", "1"}], "]"}], "]"}], "]"}], "]"}], "=", 
+                  
+                  RowBox[{"Append", "[", 
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"camefrom", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", "current"}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], ",", "current"}], "]"}]}],
+                  ";", "\[IndentingNewLine]", 
+                 RowBox[{
+                  RowBox[{"gscore", "[", 
+                   RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", 
+                    RowBox[{"neighbourNodes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], "=", 
+                  "tentativeGscore"}], ";", "\[IndentingNewLine]", 
+                 RowBox[{
+                  RowBox[{"fscore", "[", 
+                   RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", 
+                    RowBox[{"neighbourNodes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], "=", 
+                  RowBox[{
+                   RowBox[{"gscore", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", 
+                    RowBox[{"neighbourNodes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], "+", 
+                   RowBox[{"Heuristic", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", 
+                    RowBox[{"neighbourNodes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "[", 
+                    RowBox[{"[", 
+                    RowBox[{"1", ",", "1"}], "]"}], "]"}], ",", "goalPos"}], 
+                    "]"}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+                 RowBox[{"openSet", "=", 
+                  RowBox[{"Append", "[", 
+                   RowBox[{"openSet", ",", 
+                    RowBox[{"neighbourNodes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}]}], "]"}]}], ";"}], ",", 
+                RowBox[{
+                 RowBox[{"If", "[", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"tentativeGscore", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "<", 
+                    RowBox[{
+                    RowBox[{"gscore", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", 
+                    RowBox[{"neighbourNodes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}]}], ",", 
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"camefrom", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", 
+                    RowBox[{"neighbourNodes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "[", 
+                    RowBox[{"[", 
+                    RowBox[{"1", ",", "1"}], "]"}], "]"}], "]"}], "]"}], "=", 
+                    
+                    RowBox[{"Append", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"camefrom", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", "current"}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], ",", "current"}], "]"}]}],
+                     ";", "\[IndentingNewLine]", 
+                    RowBox[{
+                    RowBox[{"gscore", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", 
+                    RowBox[{"neighbourNodes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], "=", 
+                    "tentativeGscore"}], ";", "\[IndentingNewLine]", 
+                    RowBox[{
+                    RowBox[{"fscore", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", 
+                    RowBox[{"neighbourNodes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], "=", 
+                    RowBox[{
+                    RowBox[{"gscore", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", 
+                    RowBox[{"neighbourNodes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], "+", 
+                    RowBox[{"Heuristic", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"Position", "[", 
+                    RowBox[{"nodes", ",", 
+                    RowBox[{"neighbourNodes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "[", 
+                    RowBox[{"[", 
+                    RowBox[{"1", ",", "1"}], "]"}], "]"}], ",", "goalPos"}], 
+                    "]"}], "]"}]}]}], ";"}]}], "]"}], ";"}]}], "]"}], ";"}]}],
+             "]"}], ";", "\[IndentingNewLine]", 
+           RowBox[{"count", "++"}], ";"}]}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"Return", "[", "\"\<Failure\>\"", "]"}]}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\n", 
+   RowBox[{
+    RowBox[{"In", "[", "2", "]"}], ":=", 
+    RowBox[{"AstarHeuristic", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"N1", ",", "N2", ",", "N3", ",", "N4", ",", "N5", ",", "N6"}], 
+       "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+         "0", ",", "100", ",", "2", ",", "10", ",", "10", ",", "100"}], "}"}],
+         ",", 
+        RowBox[{"{", 
+         RowBox[{"100", ",", "0", ",", "1", ",", "15", ",", "20", ",", "3"}], 
+         "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"2", ",", "1", ",", "0", ",", "12", ",", "30", ",", "50"}], 
+         "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"10", ",", "15", ",", "12", ",", "0", ",", "20", ",", "50"}],
+          "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"10", ",", "20", ",", "30", ",", "20", ",", "0", ",", "60"}],
+          "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"100", ",", "3", ",", "50", ",", "50", ",", "60", ",", "0"}],
+          "}"}]}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", "\n", 
+   RowBox[{
+    RowBox[{"Out", "[", "2", "]"}], "=", 
+    RowBox[{"{", 
+     RowBox[{"N1", ",", "N3", ",", "N2", ",", "N6"}], "}"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.64139139136668*^9, 3.6413914132508993`*^9}, {
+  3.641391455991259*^9, 3.641391526993566*^9}}]
+},
+WindowSize->{808, 621},
+WindowMargins->{{269, Automatic}, {39, Automatic}},
+FrontEndVersion->"10.0 for Linux x86 (64-bit) (September 9, 2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 138, 3, 32, "Input"],
+Cell[699, 25, 16691, 389, 1331, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
+
